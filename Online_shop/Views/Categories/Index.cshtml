@@ -1,0 +1,42 @@
+﻿@model Online_shop.Models.Categories
+@{
+    ViewBag.Title = "Товары по категории";
+}
+
+<h2>@Model.Name</h2>
+
+<div class="table" style="display: inline; align-content: center; align-items: center;">
+    @if (Model.Goods.Count < 4)
+    {
+        <ul style="column-count: @Model.Goods.Count">
+            @foreach (var item in Model.Goods)
+            {
+            <li style="list-style-type:none">
+                <div style="width: 235px; margin-bottom: 20px; padding: 15px; border: 2px solid #000000; border-radius: 10px; display: inline-block;">
+                    <h4>@Html.ActionLink(item.Name, "Details/" + item.Id, "Goods")</h4>
+                    <button class="btn btn-primary">Купить</button>
+                    <br />
+                    <img style="height: 200px" src="@item.PathToPicture" alt="@item.Name" />
+                </div>
+            </li>
+            }
+        </ul>
+    }
+    else
+    {
+        <ul style="column-count: 4">
+            @foreach (var item in Model.Goods)
+            {
+            <li style="list-style-type:none">
+                <div style="width: 235px; margin-bottom: 20px; padding: 15px; border: 2px solid #000000; border-radius: 10px; display: inline-block;">
+                    <h4>@Html.ActionLink(item.Name, "Details/" + item.Id, "Goods")</h4>
+                    @Html.ActionLink("Купить", "Buy/" + Request.Cookies["user_id"] + "/" + item.Id, "Users")
+                    <br />
+                    <img style="height: 200px" src="@item.PathToPicture" alt="@item.Name" />
+                </div>
+            </li>
+            }
+        </ul>
+    }
+
+</div>
