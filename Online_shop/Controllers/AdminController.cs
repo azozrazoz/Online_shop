@@ -12,18 +12,17 @@ using Online_shop.Models;
 
 namespace Online_shop.Controllers
 {
-    public class GoodsController : Controller
+    public class AdminController : Controller
     {
         private Online_shopContext db = new Online_shopContext();
 
-        // GET: Goods
+        // GET: Admin
         public async Task<ActionResult> Index()
         {
             return View(await db.Goods.ToListAsync());
         }
 
-        // GET: Goods/Details/5
-        [Authorize]
+        // GET: Admin/Details/5
         public async Task<ActionResult> Details(int? id)
         {
             if (id == null)
@@ -38,13 +37,13 @@ namespace Online_shop.Controllers
             return View(goods);
         }
 
-        // GET: Goods/Create
+        // GET: Admin/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: Goods/Create
+        // POST: Admin/Create
         // Чтобы защититься от атак чрезмерной передачи данных, включите определенные свойства, для которых следует установить привязку. Дополнительные 
         // сведения см. в разделе https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -61,7 +60,7 @@ namespace Online_shop.Controllers
             return View(goods);
         }
 
-        // GET: Goods/Edit/5
+        // GET: Admin/Edit/5
         public async Task<ActionResult> Edit(int? id)
         {
             if (id == null)
@@ -76,7 +75,7 @@ namespace Online_shop.Controllers
             return View(goods);
         }
 
-        // POST: Goods/Edit/5
+        // POST: Admin/Edit/5
         // Чтобы защититься от атак чрезмерной передачи данных, включите определенные свойства, для которых следует установить привязку. Дополнительные 
         // сведения см. в разделе https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -92,7 +91,7 @@ namespace Online_shop.Controllers
             return View(goods);
         }
 
-        // GET: Goods/Delete/5
+        // GET: Admin/Delete/5
         public async Task<ActionResult> Delete(int? id)
         {
             if (id == null)
@@ -107,7 +106,7 @@ namespace Online_shop.Controllers
             return View(goods);
         }
 
-        // POST: Goods/Delete/5
+        // POST: Admin/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int id)

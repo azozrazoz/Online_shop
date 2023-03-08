@@ -144,7 +144,7 @@ namespace Online_shop.Controllers
                 Response.Cookies.Add(cookie);
 
                 await db.SaveChangesAsync();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "Home");
             }
 
             return View(users);
