@@ -37,5 +37,9 @@ namespace Online_shop.Models
         [System.ComponentModel.DataAnnotations.Compare("Password", ErrorMessage = "* Пароли не равны")]
         [DataType(DataType.Password)]
         public string PasswordConfirm { get; set; }
+
+        [DataType(DataType.PhoneNumber)]
+        [Display(Name = "Телефон")]
+        public string PhoneNumber { get; set; }
     }
 }

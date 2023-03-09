@@ -19,26 +19,11 @@ namespace Online_shop.Controllers
         // GET: Admin
         public async Task<ActionResult> Index()
         {
-            return View(await db.Goods.ToListAsync());
-        }
-
-        // GET: Admin/Details/5
-        public async Task<ActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Goods goods = await db.Goods.FindAsync(id);
-            if (goods == null)
-            {
-                return HttpNotFound();
-            }
-            return View(goods);
+            return View(await db.Categories.ToListAsync());
         }
 
         // GET: Admin/Create
-        public ActionResult Create()
+        public ActionResult CreateGoods()
         {
             return View();
         }
@@ -48,7 +33,7 @@ namespace Online_shop.Controllers
         // сведения см. в разделе https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "Id,Name,Description,Price,PathToPicture")] Goods goods)
+        public async Task<ActionResult> CreateGoods([Bind(Include = "Id,Name,Description,Price,PathToPicture")] Goods goods)
         {
             if (ModelState.IsValid)
             {
@@ -61,7 +46,7 @@ namespace Online_shop.Controllers
         }
 
         // GET: Admin/Edit/5
-        public async Task<ActionResult> Edit(int? id)
+        public async Task<ActionResult> EditGoods(int? id)
         {
             if (id == null)
             {
@@ -80,7 +65,7 @@ namespace Online_shop.Controllers
         // сведения см. в разделе https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "Id,Name,Description,Price,PathToPicture")] Goods goods)
+        public async Task<ActionResult> EditGoods([Bind(Include = "Id,Name,Description,Price,PathToPicture")] Goods goods)
         {
             if (ModelState.IsValid)
             {
@@ -92,7 +77,7 @@ namespace Online_shop.Controllers
         }
 
         // GET: Admin/Delete/5
-        public async Task<ActionResult> Delete(int? id)
+        public async Task<ActionResult> DeleteGoods(int? id)
         {
             if (id == null)
             {
@@ -107,14 +92,120 @@ namespace Online_shop.Controllers
         }
 
         // POST: Admin/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost, ActionName("DeleteGoods")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> DeleteConfirmed(int id)
+        public async Task<ActionResult> DeleteConfirmedGoods(int id)
         {
             Goods goods = await db.Goods.FindAsync(id);
             db.Goods.Remove(goods);
             await db.SaveChangesAsync();
             return RedirectToAction("Index");
+        }
+
+        // GET: Categories/Create
+        public ActionResult CreateCategory()
+        {
+            return View();
+        }
+
+        // POST: Categories/Create
+        // Чтобы защититься от атак чрезмерной передачи данных, включите определенные свойства, для которых следует установить привязку. Дополнительные 
+        // сведения см. в разделе https://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> CreateCategory([Bind(Include = "Id,Name,PathToPicture")] Categories categories)
+        {
+            if (ModelState.IsValid)
+            {
+                db.Categories.Add(categories);
+                await db.SaveChangesAsync();
+                return RedirectToAction("Index");
+            }
+
+            return View(categories);
+        }
+
+        // GET: Categories/Edit/5
+        public async Task<ActionResult> EditCategory(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Categories categories = await db.Categories.FindAsync(id);
+            if (categories == null)
+            {
+                return HttpNotFound();
+            }
+
+            // categories.Goods = await db.
+
+            ViewBag.Goods = await db.Goods.ToListAsync();
+
+            return View(categories);
+        }
+
+        // POST: Categories/Edit/5
+        // Чтобы защититься от атак чрезмерной передачи данных, включите определенные свойства, для которых следует установить привязку. Дополнительные 
+        // сведения см. в разделе https://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> EditCategory([Bind(Include = "Id,Name,PathToPicture")] Categories categories, int[] selectedGoods)
+        {
+            Categories category = await db.Categories.FindAsync(categories.Id);
+            category.Name = categories.Name;
+            category.PathToPicture = categories.PathToPicture;
+            category.Goods.Clear();
+
+            if (selectedGoods != null)
+            {
+                foreach (var g in db.Goods.Where(g => selectedGoods.Contains(g.Id)))
+                {
+                    category.Goods.Add(g);
+                }
+            }
+
+            if (ModelState.IsValid)
+            {
+                db.Entry(category).State = EntityState.Modified;
+                await db.SaveChangesAsync();
+                return RedirectToAction("Index");
+            }
+
+            return View(category);
+        }
+
+        // GET: Categories/Delete/5
+        public async Task<ActionResult> DeleteCategory(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Categories categories = await db.Categories.FindAsync(id);
+            if (categories == null)
+            {
+                return HttpNotFound();
+            }
+            return View(categories);
+        }
+
+        // POST: Categories/Delete/5
+        [HttpPost, ActionName("DeleteCategory")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> DeleteConfirmedCategory(int id)
+        {
+            Categories categories = await db.Categories.FindAsync(id);
+            db.Categories.Remove(categories);
+            await db.SaveChangesAsync();
+            return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> Analytics()
+        {
+            var orders = db.Orders.ToListAsync();
+            return View();
         }
 
         protected override void Dispose(bool disposing)

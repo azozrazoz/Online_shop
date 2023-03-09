@@ -9,6 +9,7 @@ using System.Web;
 using System.Web.Mvc;
 using Online_shop.Data;
 using Online_shop.Models;
+using Microsoft.Ajax.Utilities;
 
 namespace Online_shop.Controllers
 {
@@ -131,6 +132,16 @@ namespace Online_shop.Controllers
             return View();
         }
 
+        public ActionResult Login()
+        {
+            return View();
+        }
+
+        /*public ActionResult Logout()
+        {
+            return View();
+        }*/
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register([Bind(Include = "Id,Name,Email,Password,PasswordConfirm")] Users users)
@@ -138,9 +149,11 @@ namespace Online_shop.Controllers
             if (ModelState.IsValid)
             {
                 db.Users.Add(users);
-
+                
                 HttpCookie cookie = new HttpCookie("user_id");
-                cookie.Values["user_id"] = users.Id.ToString();
+                cookie.Name = "user_id";
+                cookie.Value = users.Id.ToString();
+                cookie.HttpOnly = true;
                 Response.Cookies.Add(cookie);
 
                 await db.SaveChangesAsync();
@@ -151,9 +164,11 @@ namespace Online_shop.Controllers
         }
 
         [HttpGet]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> Buy(int? userId, int? id)
         {
-            if (id != null && userId != null)
+            return View();
+            /*if (id != null && userId != null)
             {
                 Goods goods = await db.Goods.FindAsync(id);
                 Users user = await db.Users.FindAsync(userId);
@@ -162,10 +177,11 @@ namespace Online_shop.Controllers
                     return View();
                 }
             }
-            return HttpNotFound();
+            return RedirectToAction("Register");*/
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> Buy(Users user, Goods goods)
         {
             if (user != null && goods != null)

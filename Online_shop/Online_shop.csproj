@@ -134,6 +134,8 @@
     <Compile Include="Controllers\OrdersController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Data\Online_shopContext.cs" />
+    <Compile Include="Filters\AuthenticationFilter.cs" />
+    <Compile Include="Filters\AuthorizationFilter.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -152,6 +154,10 @@
     <Compile Include="Migrations\202302020453460_Orders.cs" />
     <Compile Include="Migrations\202302020453460_Orders.designer.cs">
       <DependentUpon>202302020453460_Orders.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202303091412408_fourth.cs" />
+    <Compile Include="Migrations\202303091412408_fourth.designer.cs">
+      <DependentUpon>202303091412408_fourth.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Goods.cs" />
@@ -218,20 +224,20 @@
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Goods\Create.cshtml" />
-    <Content Include="Views\Goods\Delete.cshtml" />
+    <Content Include="Views\Admin\CreateGoods.cshtml" />
+    <Content Include="Views\Admin\DeleteGoods.cshtml" />
     <Content Include="Views\Goods\Details.cshtml" />
-    <Content Include="Views\Goods\Edit.cshtml" />
+    <Content Include="Views\Admin\EditGoods.cshtml" />
     <Content Include="Views\Goods\Index.cshtml" />
     <Content Include="Views\Users\Create.cshtml" />
     <Content Include="Views\Users\Delete.cshtml" />
     <Content Include="Views\Users\Details.cshtml" />
     <Content Include="Views\Users\Edit.cshtml" />
     <Content Include="Views\Users\Index.cshtml" />
-    <Content Include="Views\Categories\Create.cshtml" />
-    <Content Include="Views\Categories\Delete.cshtml" />
+    <Content Include="Views\Admin\CreateCategory.cshtml" />
+    <Content Include="Views\Admin\DeleteCategory.cshtml" />
     <Content Include="Views\Categories\Details.cshtml" />
-    <Content Include="Views\Categories\Edit.cshtml" />
+    <Content Include="Views\Admin\EditCategory.cshtml" />
     <Content Include="Views\Categories\Index.cshtml" />
     <Content Include="Views\Users\Register.cshtml" />
     <Content Include="Views\Orders\Create.cshtml" />
@@ -240,15 +246,10 @@
     <Content Include="Views\Orders\Edit.cshtml" />
     <Content Include="Views\Orders\Index.cshtml" />
     <Content Include="Views\Users\Buy.cshtml" />
-    <Content Include="Views\Admin\Create.cshtml" />
-    <Content Include="Views\Admin\Delete.cshtml" />
-    <Content Include="Views\Admin\Details.cshtml" />
-    <Content Include="Views\Admin\Edit.cshtml" />
     <Content Include="Views\Admin\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Filters\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
@@ -275,6 +276,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202302020453460_Orders.resx">
       <DependentUpon>202302020453460_Orders.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202303091412408_fourth.resx">
+      <DependentUpon>202303091412408_fourth.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
