@@ -9,7 +9,10 @@ using System.Web;
 using System.Web.Mvc;
 using Online_shop.Data;
 using Online_shop.Models;
-using Microsoft.Ajax.Utilities;
+using Microsoft.AspNet.Identity;
+using System.Security.Claims;
+using System.Web.Services.Description;
+using Microsoft.AspNetCore.Identity;
 
 namespace Online_shop.Controllers
 {
@@ -132,78 +135,92 @@ namespace Online_shop.Controllers
             return View();
         }
 
+        [HttpGet]
+        [ValidateAntiForgeryToken]
         public ActionResult Login()
         {
             return View();
         }
 
-        /*public ActionResult Logout()
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Login([Bind(Include = "Email,Password,")] LoginModel model)
         {
-            return View();
-        }*/
+            if (model != null)
+            {
+                Users user = await db.Users.Where(u => u.Email == model.Email).FirstAsync();
+                if (user != null)
+                {
+                    if (user.Password == model.Password)
+                    {
+                        HttpCookie user_id = new HttpCookie("user_id");
+                        user_id.Name = "user_id";
+                        user_id.Value = user.Id.ToString();
+                        user_id.HttpOnly = true;
+
+                        HttpCookie ip = new HttpCookie("ip");
+                        ip.Name = "ip";
+                        ip.Value = Request.UserHostAddress;
+                        ip.HttpOnly = true;
+
+                        HttpCookie browser = new HttpCookie("browser");
+                        browser.Name = "browser";
+                        browser.Value = HttpContext.Request.Browser.Browser;
+                        browser.HttpOnly = true;
+
+
+                        Response.Cookies.Add(user_id);
+                        Response.Cookies.Add(ip);
+                        Response.Cookies.Add(browser);
+                        return RedirectToAction("Index", "Home");
+                    }
+                }
+
+                return PartialView("LoginError");
+            }
+
+            return RedirectToAction("Login");
+        }
+
+        [HttpGet]
+        public ActionResult Logout()
+        {
+            return RedirectToAction("Login");
+        }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Register([Bind(Include = "Id,Name,Email,Password,PasswordConfirm")] Users users)
+        public async Task<ActionResult> Register([Bind(Include = "Id,Name,Email,Password,PasswordConfirm,PhoneNumber")] Users users)
         {
             if (ModelState.IsValid)
             {
                 db.Users.Add(users);
-                
-                HttpCookie cookie = new HttpCookie("user_id");
-                cookie.Name = "user_id";
-                cookie.Value = users.Id.ToString();
-                cookie.HttpOnly = true;
-                Response.Cookies.Add(cookie);
+
+                HttpCookie user_id = new HttpCookie("user_id");
+                user_id.Name = "user_id";
+                user_id.Value = users.Id.ToString();
+                user_id.HttpOnly = true;                
+
+                HttpCookie ip = new HttpCookie("ip");
+                ip.Name = "ip";
+                ip.Value = Request.UserHostAddress;
+                ip.HttpOnly = true;
+
+                HttpCookie browser = new HttpCookie("browser");
+                browser.Name = "browser";
+                browser.Value = HttpContext.Request.Browser.Browser;
+                browser.HttpOnly = true;
+
+
+                Response.Cookies.Add(user_id);
+                Response.Cookies.Add(ip);
+                Response.Cookies.Add(browser);
 
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index", "Home");
             }
 
             return View(users);
-        }
-
-        [HttpGet]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Buy(int? userId, int? id)
-        {
-            return View();
-            /*if (id != null && userId != null)
-            {
-                Goods goods = await db.Goods.FindAsync(id);
-                Users user = await db.Users.FindAsync(userId);
-                if (goods != null && user != null)
-                {
-                    return View();
-                }
-            }
-            return RedirectToAction("Register");*/
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Buy(Users user, Goods goods)
-        {
-            if (user != null && goods != null)
-            {
-                Orders order = await db.Orders.Where(c => c.User.Id == user.Id).FirstOrDefaultAsync();
-
-                if (order == null)
-                {
-                    List<Goods> goodList = new List<Goods> { goods };
-
-                    db.Orders.Add(new Orders { Goods = goodList, User = user });
-                }
-                else
-                {
-                    order.Goods.Add(goods);
-                    await db.SaveChangesAsync();
-                }
-
-                return RedirectToAction("Index", "Orders");
-            }
-
-            return RedirectToAction("Index", "Orders");
         }
     }
 }

@@ -205,7 +205,7 @@ namespace Online_shop.Controllers
         public async Task<ActionResult> Analytics()
         {
             var orders = db.Orders.ToListAsync();
-            return View();
+            return View(orders);
         }
 
         protected override void Dispose(bool disposing)

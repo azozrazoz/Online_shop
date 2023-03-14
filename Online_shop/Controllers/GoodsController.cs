@@ -9,7 +9,6 @@ using System.Web;
 using System.Web.Mvc;
 using Online_shop.Data;
 using Online_shop.Models;
-
 namespace Online_shop.Controllers
 {
     public class GoodsController : Controller
@@ -124,7 +123,45 @@ namespace Online_shop.Controllers
             {
                 db.Dispose();
             }
-            base.Dispose(disposing);
+            base.Dispose(disposing);  
+        }
+
+        [HttpGet]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Buy(int? id)
+        {
+            Goods goods = await db.Goods.FindAsync(id);
+            if (goods == null)
+            {
+                return HttpNotFound();
+            }
+
+            return View(goods);
+            /*if (id != null && userId != null)
+            {
+                Goods goods = await db.Goods.FindAsync(id);
+                Users user = await db.Users.FindAsync(userId);
+                if (goods != null && user != null)
+                {
+                    return View();
+                }
+            }
+            return RedirectToAction("Register");*/
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Buy(Users user, List<Goods> goods)
+        {
+            if (user != null && goods != null)
+            {
+                db.Orders.Add(new Orders { Goods = goods, User = user });
+                await db.SaveChangesAsync();
+
+                return RedirectToAction("Index", "Home");
+            }
+
+            return RedirectToAction("Index", "Home");
         }
     }
 }

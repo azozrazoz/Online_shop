@@ -14,7 +14,9 @@
             <li style="list-style-type:none">
                 <div style="width: 235px; margin-bottom: 20px; padding: 15px; border: 2px solid #000000; border-radius: 10px; display: inline-block;">
                     <h4>@Html.ActionLink(item.Name, "Details/" + item.Id, "Goods")</h4>
-                    <button class="btn btn-primary">Купить</button>
+                    <button class="btn btn-primary" style="color: white;">
+                        @Html.ActionLink("Купить", "Buy/" + "/" + item.Id, "Orders")
+                    </button>
                     <br />
                     <img style="height: 200px" src="@item.PathToPicture" alt="@item.Name" />
                 </div>
@@ -30,7 +32,9 @@
             <li style="list-style-type:none">
                 <div style="width: 235px; margin-bottom: 20px; padding: 15px; border: 2px solid #000000; border-radius: 10px; display: inline-block;">
                     <h4>@Html.ActionLink(item.Name, "Details/" + item.Id, "Goods")</h4>
-                    @Html.ActionLink("Купить", "Buy/" + Request.Cookies["user_id"].Value + "/" + item.Id, "Users")
+                    <button class="btn btn-primary" style="color: white; ">
+                        @Html.ActionLink("Купить", "Buy/" + "/" + item.Id, "Orders")
+                    </button>
                     <br />
                     <img style="height: 200px" src="@item.PathToPicture" alt="@item.Name" />
                 </div>

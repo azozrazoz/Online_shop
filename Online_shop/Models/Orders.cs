@@ -10,10 +10,5 @@ namespace Online_shop.Models
         public int Id { get; set; }
         public List<Goods> Goods { get; set; }
         public Users User { get; set; }
-
-        public Orders() 
-        {
-            Goods= new List<Goods>();
-        }
     }
 }
